@@ -1,6 +1,9 @@
+> [!WARNING]
+> Chart has been moved to [sftpgo/helm-chart](https://github.com/sftpgo/helm-chart).
+
 # sftpgo
 
-![version: 0.19.0](https://img.shields.io/badge/version-0.19.0-informational?style=flat-square) ![type: application](https://img.shields.io/badge/type-application-informational?style=flat-square) ![app version: 2.5.4](https://img.shields.io/badge/app%20version-2.5.4-informational?style=flat-square) ![kube version: >=1.16.0-0](https://img.shields.io/badge/kube%20version->=1.16.0--0-informational?style=flat-square) [![artifact hub](https://img.shields.io/badge/artifact%20hub-sftpgo-informational?style=flat-square)](https://artifacthub.io/packages/helm/sagikazarmark/sftpgo)
+![version: 0.24.0](https://img.shields.io/badge/version-0.24.0-informational?style=flat-square) ![type: application](https://img.shields.io/badge/type-application-informational?style=flat-square) ![app version: 2.5.4](https://img.shields.io/badge/app%20version-2.5.4-informational?style=flat-square) ![kube version: >=1.16.0-0](https://img.shields.io/badge/kube%20version->=1.16.0--0-informational?style=flat-square) [![artifact hub](https://img.shields.io/badge/artifact%20hub-sftpgo-informational?style=flat-square)](https://artifacthub.io/packages/helm/sagikazarmark/sftpgo)
 
 Fully featured and highly configurable SFTP server with optional FTP/S and WebDAV support.
 
@@ -15,7 +18,7 @@ helm install --generate-name --wait skm/sftpgo
 
 ## Configuration
 
-SFTPGo has an extensive set of [configuration](https://github.com/drakkan/sftpgo/blob/master/docs/full-configuration.md) options allowing you to control the large set of features it provides.
+SFTPGo has an extensive set of [configuration](https://docs.sftpgo.com/latest/config-file/) options allowing you to control the large set of features it provides.
 
 The following options are available to configure SFTPGo when installing it with this chart.
 
@@ -112,7 +115,7 @@ require at least one port.
 | ftpd.enabled | bool | `false` | Enable FTP service. |
 | webdavd.enabled | bool | `false` | Enable WebDAV service. |
 | httpd.enabled | bool | `true` | Enable HTTP service. |
-| config | object | `{}` | Application configuration. See the [official documentation](https://github.com/drakkan/sftpgo/blob/master/docs/full-configuration.md). |
+| config | object | `{}` | Application configuration. See the [official documentation](https://docs.sftpgo.com/latest/config-file/). |
 | volumes | list | `[]` | Additional storage [volumes](https://kubernetes.io/docs/concepts/storage/volumes/). See the [API reference](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#volumes-1) for details. |
 | volumeMounts | list | `[]` | Additional [volume mounts](https://kubernetes.io/docs/tasks/configure-pod-container/configure-volume-storage/). See the [API reference](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#volumes-1) for details. |
 | envFrom | list | `[]` | Additional environment variables mounted from [secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables) or [config maps](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables). See the [API reference](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#environment-variables) for details. |
@@ -121,8 +124,9 @@ require at least one port.
 | serviceAccount.create | bool | `true` | Enable service account creation. |
 | serviceAccount.annotations | object | `{}` | Annotations to be added to the service account. |
 | serviceAccount.name | string | `""` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. |
+| deploymentAnnotations | object | `{}` | Annotations to be added to deployment. |
 | podAnnotations | object | `{}` | Annotations to be added to pods. |
-| podSecurityContext | object | `{}` | Pod [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). See the [API reference](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context) for details. |
+| podSecurityContext | object | `{"fsGroup":1000}` | Pod [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). See the [API reference](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context) for details. |
 | securityContext | object | `{}` | Container [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container). See the [API reference](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1) for details. |
 | initContainers | list | `[]` | Add [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) to the pod. |
 | service.annotations | object | `{}` | Annotations to be added to the service. |
@@ -160,3 +164,5 @@ require at least one port.
 | topologySpreadConstraints.maxSkew | int | `1` | Degree to which pods may be unevenly distributed. |
 | topologySpreadConstraints.topologyKey | string | `"topology.kubernetes.io/zone"` | The key of node labels. See https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/ |
 | topologySpreadConstraints.whenUnsatisfiable | string | `"DoNotSchedule"` | How to deal with a Pod if it doesn't satisfy the spread constraint. |
+| persistence.enabled | bool | `false` | Enable persistent storage for the /var/lib/sftpgo directory, saving state of the default sqlite db. |
+| persistence.pvc | object | `{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"5Gi"}},"storageClassName":"premium-rwo"}` | Create the pvc desired specificiation. |
